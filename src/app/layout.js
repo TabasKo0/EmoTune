@@ -22,6 +22,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <nav className="flex flex-row justify-between items-center  bg-secondaryBackground h-[10vh] text-sm text-gray-500 p-6">
+          <div className="font-bold text-2xl text-foreground textSize-8xl"><a href="/">EmoTune</a></div>
+          <div className="font-bold text-2xl text-foreground"><a href="/profile">Profile</a></div>
+        </nav>
         {children}
       </body>
     </html>
