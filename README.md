@@ -1,4 +1,5 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Spotify Ai powered Mood based playlist generator:
+Login with spotify to begin 
 
 ## Getting Started
 
