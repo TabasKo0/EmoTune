@@ -4,21 +4,24 @@
   --background: #ffffff;
   --foreground: #171717;
   --secondaryBackground: #f0f0f0;
+  --tertbac: #e0e0e0;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-secondaryBackground: var(--secondaryBackground);
+  --color-tertbac: var(--tertbac);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #933869;
+    --background: #733893;
     --foreground: #e3edc1;
-    --secondaryBackground: #800f4b;
+    --secondaryBackground: #530f80;
+    --tertbac: #6d1c93;
   }
 }
 

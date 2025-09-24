@@ -4,7 +4,7 @@ import {useState} from "react";
 import loading from "./loading";
 
 export default function Home() {
-  const [loading,isloading]=useState(false);
+  const [loading,isloading]=useState(true);
 
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-[90vh] p-8 pb-20 gap-16 sm:p-20">
