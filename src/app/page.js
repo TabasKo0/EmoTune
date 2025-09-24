@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import {useState} from "react";
-import loading from "./loading";
 
 export default function Home() {
   const [loading,isloading]=useState(true);

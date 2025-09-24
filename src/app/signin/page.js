@@ -5,7 +5,7 @@ export default function SignInPage() {
     async function handleSignIn() {
         try {
             const res=await fetch('/api/auth/signin');
-            const data=await res.json();
+            const data= await res.json();
             if (res.ok) {
                 window.location.href = data.url;
             }

@@ -2,9 +2,11 @@
 import React, { use } from 'react'
 import { useEffect ,useState} from 'react';
 import Image from 'next/image';
+import { TrophySpin } from 'react-loading-indicators';
 
 export default function profile() {
     const [userData, setUserData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
             const res = await fetch('/api/auth/check');
@@ -28,10 +30,13 @@ export default function profile() {
     }, []);
 
     async function handleLogout() {
+
         try {
+            setIsLoading(true);
             const res=await fetch('/api/auth/logout');
+            setIsLoading(false);
             if (res.ok){
-                console.log("Logged out");
+                window.location.href='/';
             }else{
                 console.error("Error logging out");
             }
@@ -43,15 +48,21 @@ export default function profile() {
     return (
         <div className="flex justify-center">
             {!userData?.error ? (
-                <div className={`absolute flex items-center bg-tertbac gap-4 p-4 mt-10 rounded-[36px] shadow w-[90vw] ${isMobile ? 'flex-col' : 'flex-row'}`}>
-                    {userData?.images?.[0]?.url ? <Image src={userData?.images?.[0]?.url ? userData.images[0].url : null} alt={userData.display_name ? userData.display_name : 'username'} height={100} width={48} className="rounded-[48]"/>:"username"}
-                    <div><div>Username: {userData?.display_name}</div>
-                    <div>Email: {userData?.email ? userData.email : "No email provided"}</div>
+                <div className={`absolute flex items-start bg-tertbac gap-4 p-4 mt-10 rounded-[36px] shadow w-[90vw] ${isMobile ? 'flex-col max-w-[90vw]' : 'flex-row justify-evenly max-w-[50vw]'} min-h-[56vh] `}>
+                    {userData?.images?.[0]?.url ? <Image src={userData?.images?.[0]?.url ? userData.images[0].url : null} alt={userData.display_name ? userData.display_name : 'username'} height="200" width="200" className="rounded-[48]"/>:"username"}
+                    <div>
+                        <div>Username: {userData?.display_name}</div>
+                        <div>Email: {userData?.email ? userData.email : "No email provided"}</div>
                     </div>
-                    <button className="bg-red-500 text-white px-4 py-2 rounded hover:scale-[1.2]" onClick={handleLogout}>Logout</button>
+                    {isLoading ? (
+                        <TrophySpin color="#ae104b" size="medium" text="Logging out..." textColor="#870303" />
+                    ) : (
+                        <button className="absolute bottom-[2em] right-[2em] bg-red-500 text-white px-4 py-2 rounded hover:scale-[1.1] transition duration-300" onClick={handleLogout}>Logout</button>
+                    )}
                 </div>
             ) : (
-                <p>Loading...</p>
+                <div className="absolute top-[36vh]"><TrophySpin color="#733893" size="medium" text="loading..." textColor="#870303" />
+                </div>
             )}
         </div>
     )
@@ -59,36 +70,36 @@ export default function profile() {
 
 /*
 {
-  "country": "IN",
-  "display_name": "fat_PANDA_1",
-  "email": "souptikshivam@gmail.com",
+  "country": "",
+  "display_name": "",
+  "email": "@.",
   "explicit_content": {
-    "filter_enabled": false,
-    "filter_locked": false
+    "filter_enabled": ,
+    "filter_locked": 
   },
   "external_urls": {
-    "spotify": "https://open.spotify.com/user/hbpl35dylvao9w9jmzv4gu2ru"
+    "spotify": ""
   },
   "followers": {
     "href": null,
     "total": 2
   },
-  "href": "https://api.spotify.com/v1/users/hbpl35dylvao9w9jmzv4gu2ru",
-  "id": "hbpl35dylvao9w9jmzv4gu2ru",
+  "href": "u",
+  "id": "h",
   "images": [
     {
       "height": 300,
-      "url": "https://i.scdn.co/image/ab6775700000ee85b5f4fe94542242d727ec4ad8",
+      "url": "https://i.scdn.co/image/",
       "width": 300
     },
     {
       "height": 64,
-      "url": "https://i.scdn.co/image/ab67757000003b82b5f4fe94542242d727ec4ad8",
+      "url": "https://i.scdn.co/image/",
       "width": 64
     }
   ],
   "product": "premium",
   "type": "user",
-  "uri": "spotify:user:hbpl35dylvao9w9jmzv4gu2ru"
+  "uri": "spotify:user:h"
 }
 */
