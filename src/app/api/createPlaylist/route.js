@@ -25,7 +25,11 @@ export async function POST(req) {
         });
         
         const playlistData = await response.json();
+        const playlistUrl = `${playlistData.id}`;
         
+        console.log("playlistdata",playlistData);
+        const trackUrl=`https://api.spotify.com/v1/playlists/${playlistData.id}/tracks`;
+
         async function getTrackUri(title, artist) {
             const q = `track:${title} artist:${artist}`;
             const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(q)}&type=track&limit=1`;
@@ -45,11 +49,7 @@ export async function POST(req) {
                 getTrackUri(song.title, song.artist)
             )
             );
-            const validUris = uris.filter(Boolean); // Remove any not found
-
-        console.log("playlistdata",playlistData);
-        const trackUrl=`https://api.spotify.com/v1/playlists/${playlistData.id}/tracks`;
-    
+            const validUris = uris.filter(Boolean);
 
         console.log(validUris);
         const songResponse = await fetch(trackUrl, {
@@ -64,7 +64,8 @@ export async function POST(req) {
         console.log(songData);
         return NextResponse.json({ 
             playlist: playlistData, 
-            addTracksResult: songData 
+            addTracksResult: songData,
+            playlistUrl
         });
     }catch (error) {
         console.error(error);

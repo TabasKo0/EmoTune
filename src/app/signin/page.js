@@ -16,5 +16,5 @@ export default function SignInPage() {
             console.error('Error during sign-in:', error);
         }
     }
-    return <div><button onClick={handleSignIn}>Sign In with Spotify</button></div>;
+    return <div className={"flex justify-center items-start h-screen mt-10"}><button onClick={handleSignIn} className="bg-tertbac p-4 rounded-[36px]">Sign In with Spotify</button></div>;
 }

@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export default function RootLayout({ children }) {
+  
   const [userData, setUserData] = useState(null);
       useEffect(() => {
           const fetchData = async () => {
