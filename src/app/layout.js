@@ -20,12 +20,12 @@ export default function RootLayout({ children }) {
           const fetchData = async () => {
               const res = await fetch('/api/auth/check');
               const data = await res.json();
-              console.log(JSON.stringify(data, null, 2));
+              //console.log(JSON.stringify(data, null, 2));
               setUserData(data);
           };
           fetchData();
       }, []);
-  console.log(userData);
+  //console.log(userData);
   return (
     <html lang="en">
       <body

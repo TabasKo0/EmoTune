@@ -11,7 +11,7 @@ export default function profile() {
         const fetchData = async () => {
             const res = await fetch('/api/auth/check');
             const data = await res.json();
-            console.log(JSON.stringify(data, null, 2));
+            //console.log(JSON.stringify(data, null, 2));
             setUserData(data);
         };
         fetchData();
