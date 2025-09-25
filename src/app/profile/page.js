@@ -8,6 +8,7 @@ export default function profile() {
     const [userData, setUserData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [playlists,setPlaylists]=useState(null);
+    const [show,isshow] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
             const res = await fetch('/api/auth/check');
@@ -20,6 +21,7 @@ export default function profile() {
             const res = await fetch('/api/playlistHistory');
             const data = await res.json();
             setPlaylists(data.playlists);
+            isshow(new Array(data.playlists.length).fill(false));
             //console.log("Wdadawd",playlists)
             console.log(data);
         }
@@ -80,10 +82,31 @@ export default function profile() {
             <h2 className="text-2xl font-bold mt-10 mb-4">Your Playlists</h2>
             <ol className="flex flex-col justify-center items-center mb-10 gap-4 w-[90vw] max-w-4xl">
                 {playlists ? playlists.map((item, index) => (
-                    <li key={index}><div className="bg-secondaryBackground min-w-[90vw] p-4 rounded-[20px]"><a href={item.url}>
-                        <div className="font-bold text-foreground text-3xl ">{item.name}</div>
-                        <div>{item.description}</div>
-                    </a></div></li>
+                    <li key={index}><div className="bg-secondaryBackground min-w-[90vw] p-4 rounded-[20px]">
+                        <div className="flex flex-row justify-between "><div><div className="font-bold text-foreground text-3xl ">{item.name}</div>
+                            <div>{item.description}</div></div>
+                            <div><button onClick={() => isshow(prev => {
+                                const newShow = [...prev];
+                                newShow[index] = !newShow[index];
+                                return newShow;
+                            })}>
+                                <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="white"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                >
+                                <path d="M6 9l6 6 6-6" />
+                                </svg>
+                                </button></div>
+                            </div>
+                        <embed src={"https://open.spotify.com/embed/playlist/"+item.url} className={`w-[90vw] h-[10em] object-cover ${show[index] ? '' : 'hidden'}`} />
+                    </div></li>
                 )) : null}
             </ol>
         </div>
