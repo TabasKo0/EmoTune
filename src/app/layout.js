@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
               const res = await fetch('/api/auth/check');
               const data = await res.json();
               if(res.status===401 && window.location.pathname!=="/signin"){
-                console.log("Not authenticated, redirect to signin");
+                window.location.href='/signin';
               }
               setUserData(data);
           };
