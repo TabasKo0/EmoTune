@@ -78,6 +78,13 @@ export default function Home() {
       const data = await response.json();
       console.log(data);
       setPlaylistData(data);
+      const response2 = await fetch('/api/playlistHistory', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: data.name , description: data.description, url: playlistUrl }),
+      });
       return data;
     }
 
@@ -123,7 +130,7 @@ export default function Home() {
   }
 
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] justify-items-center min-h-[90vh] p-8 pb-20 gap-16 ">
+    <div className="font-sans grid grid-rows-[20px_1fr_20px] justify-items-center min-h-[90vh] p-8 pb-20 ">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <div className="flex gap-4 items-center flex-col">
           <form
@@ -181,59 +188,13 @@ export default function Home() {
     </div>
     <div className="max-w-4xl mx-auto mt-10">
       <h3 className="text-2xl font-semibold mb-4">Tracks</h3>
-      <ol className="space-y-6">
+      <ol>
         {playlist?.tracks?.items?.map((item, i) =>
           item?.track ? (
             <li
               key={item.track.id || i}
-              className="flex items-center gap-4 bg-secondaryBackground p-4 rounded-lg"
-            >
-              {item.track.album?.images?.[0]?.url && (
-                <img
-                  src={item.track.album.images[0].url}
-                  alt={item.track.album.name}
-                  className="w-12 h-12 rounded-md object-cover"
-                />
-              )}
-              <div className="flex-1 ">
-                <div className="font-semibold text-lg flex items-center gap-2">
-                  {item.track.external_urls?.spotify ? (
-                    <a
-                      href={item.track.external_urls.spotify}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:underline text-foreground"
-                    >
-                      {item.track.name}
-                    </a>
-                  ) : (
-                    item.track.name
-                  )}
-                  <span className="text-gray-400 text-sm font-normal">
-                    by{" "}
-                    {item.track.artists.map((artist, j) =>
-                      artist.external_urls?.spotify ? (
-                        <a
-                          key={artist.id}
-                          href={artist.external_urls.spotify}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:underline text-foreground"
-                        >
-                          {artist.name}
-                          {j < item.track.artists.length - 1 ? ", " : ""}
-                        </a>
-                      ) : (
-                        <span key={artist.id}>
-                          {artist.name}
-                          {j < item.track.artists.length - 1 ? ", " : ""}
-                        </span>
-                      )
-                    )}
-                  </span>
-                </div>
-                <div className="text-gray-400 text-sm">{item.track.album?.name}</div>
-              </div>
+              className="flex items-center gap-4"
+            ><embed src={item.track.external_urls.spotify.replace("track/", "embed/track/")} className="w-[90vw] h-[10em] object-cover" />
             </li>
           ) : null
         )}
