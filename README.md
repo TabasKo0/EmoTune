@@ -4,7 +4,6 @@
 
 EmoTune is a Next.js web application that creates personalized Spotify playlists using artificial intelligence. Simply describe your mood, activity, or what you're feeling, and EmoTune will generate a curated playlist tailored to your emotions.
 
-![EmoTune Home Page](<img width="1919" height="1079" alt="Screenshot 2025-09-25 231800" src="https://github.com/user-attachments/assets/ade019cc-b413-4d1c-9350-849791c439d2" />)
 <img width="1919" height="1079" alt="Screenshot 2025-09-25 231800" src="https://github.com/user-attachments/assets/ade019cc-b413-4d1c-9350-849791c439d2" />
 
 ## ✨ Features
@@ -15,14 +14,16 @@ EmoTune is a Next.js web application that creates personalized Spotify playlists
 - AI-powered playlist creation using Google Gemini API
 - Automatic Spotify playlist creation in your account
 
-![Mood Input Example](https://github.com/user-attachments/assets/10c3bd40-81e2-4267-98c6-089c7b2ea57f)
+<img width="1919" height="1079" alt="Screenshot 2025-09-25 232708" src="https://github.com/user-attachments/assets/29480bbc-43f9-41df-b43f-66d1fd042836" />
+
 
 ### 🔐 **Spotify Integration** 
 - Secure OAuth authentication with Spotify
 - Direct playlist creation in your Spotify account
 - Access to your Spotify profile and listening history
 
-![Spotify Sign In](https://github.com/user-attachments/assets/f54080f5-6e03-48ed-a293-aa2f1a6774bc)
+<img width="1900" height="1079" alt="Screenshot 2025-09-25 233129" src="https://github.com/user-attachments/assets/3dbbd27e-ac5f-4b41-8103-04c17aa510e5" />
+
 
 ### 📱 **Responsive Design**
 - Mobile-friendly interface
