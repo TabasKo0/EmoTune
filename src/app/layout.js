@@ -2,6 +2,7 @@
 import "./globals.css";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 
 
@@ -26,9 +27,9 @@ export default function RootLayout({ children }) {
         className={`antialiased`}
       >
         <nav className="flex flex-row justify-between items-center  bg-secondaryBackground h-[10vh] text-sm text-gray-500 p-6 shadow">
-          <div className="font-bold text-2xl text-foreground textSize-8xl"><a href="/">EmoTune</a></div>
+          <div className="font-bold text-2xl text-foreground textSize-8xl"><Link href="/">EmoTune</Link></div>
           <div className="font-bold text-2xl text-foreground">
-            {!userData?.error ? <a href="/profile">{userData?.images?.[0]?.url ?<Image src={userData?.images?.[0]?.url ? userData.images[0].url : null} alt={userData.display_name ? userData.display_name : 'username'} height={100} width={48} className="rounded-full"/>:"username"}</a> : <a href="/signin">Login</a>}</div>
+            {!userData?.error ? <Link href="/profile">{userData?.images?.[0]?.url ?<Image src={userData?.images?.[0]?.url ? userData.images[0].url : null} alt={userData.display_name ? userData.display_name : 'username'} height={100} width={48} className="rounded-full"/>:"username"}</Link> : <Link href="/signin">Login</Link>}</div>
         </nav>
         {children}
       </body>

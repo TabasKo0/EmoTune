@@ -4,7 +4,7 @@ import { useEffect ,useState} from 'react';
 import Image from 'next/image';
 import { TrophySpin } from 'react-loading-indicators';
 
-export default function profile() {
+export default function Profile() {
     const [userData, setUserData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [playlists,setPlaylists]=useState(null);

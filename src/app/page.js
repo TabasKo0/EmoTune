@@ -1,6 +1,8 @@
 "use client";
 import {useState,useEffect} from "react";
 import { TrophySpin } from "react-loading-indicators";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   const [loading,isloading]=useState(false);
@@ -143,9 +145,11 @@ export default function Home() {
           {playlisturl ? <div> <div className={`bg-secondaryBackground text-white rounded-xl p-8 max-w-4xl mx-auto flex  gap-8 ${isMobile ? 'flex-col' : 'flex-row'} sm:flex-row items-center sm:items-start`}>
       {playlist?.images?.[0]?.url && (
         <div className="flex-shrink-0">
-          <img
+          <Image
             src={playlist.images[0].url}
             alt={playlist.name}
+            width={48}
+            height={48}
             className="w-48 h-48 rounded-lg object-cover"
           />
         </div>
@@ -158,14 +162,14 @@ export default function Home() {
           <p className="mb-2">
             <span className="font-semibold">By:</span>{" "}
             {playlist?.owner?.external_urls?.spotify ? (
-              <a
-                href={playlist?.owner.external_urls.spotify}
+              <Link
+                href={playlist?.owner.external_urls.spotify || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-foreground hover:underline"
               >
                 {playlist?.owner.display_name}
-              </a>
+              </Link>
             ) : (
               playlist?.owner?.display_name
             )}
@@ -175,14 +179,14 @@ export default function Home() {
           </p>
         </div>
         <div className="mt-6">
-          <a
-            href={playlist?.external_urls?.spotify}
+          <Link
+            href={playlist?.external_urls?.spotify || "#"}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-foreground hover:bg-green-600 text-tertbac px-8 py-2 rounded-full font-bold transition"
           >
             Open in Spotify
-          </a>
+          </Link>
         </div>
       </div>
     </div>
