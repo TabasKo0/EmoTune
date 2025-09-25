@@ -35,7 +35,9 @@ EmoTune is a Next.js web application that creates personalized Spotify playlists
 - SQLite database for playlist storage
 - View detailed playlist information and tracks
 
-![Dashboard View](https://github.com/user-attachments/assets/678e4792-861d-4578-b6cc-46326fb0a8f8)
+<img width="1913" height="1071" alt="Screenshot 2025-09-25 232731" src="https://github.com/user-attachments/assets/59d88f60-aadf-4b4f-8d7d-973a87cd12b0" />
+<img width="1919" height="1079" alt="Screenshot 2025-09-25 232747" src="https://github.com/user-attachments/assets/4f481668-403d-41f9-9685-d8a3ce299edf" />
+
 
 ## 🚀 Technology Stack
 
