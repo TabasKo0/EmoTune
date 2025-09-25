@@ -3,6 +3,7 @@ import {useState,useEffect} from "react";
 import { TrophySpin } from "react-loading-indicators";
 import Link from "next/link";
 import Image from "next/image";
+import ScrollStack, { ScrollStackItem } from '../components/ScrollStack'
 
 export default function Home() {
   const [loading,isloading]=useState(false);
@@ -132,17 +133,17 @@ export default function Home() {
   }
 
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] justify-items-center min-h-[90vh] p-8 pb-20 ">
+    <div className="font-sans grid grid-rows-[20px_1fr_20px] justify-items-center min-h-[90vh] pb-20 ">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <div className="flex gap-4 items-center flex-col">
           <form
             onSubmit={handleSubmit()}
-            className="flex items-center flex-col gap-4">
-            <input type="text" name="message" placeholder="What are you in the mood for today ?" className="p-4 rounded-full border border-gray-300 w-[300px] sm:w-[400px] focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-            <button type ="submit" className="bg-secondaryBackground text-foreground px-4 py-2 rounded-full hover:scale-[1.1] transition duration-300">Generate Playlist</button>
+            className="flex items-center flex-col gap-4 ">
+            <input type="text" name="message" placeholder="What are you in the mood for today ?" className="bg-gray-600/20 h-[8vh] text-sm text-white p-6 ring-4 ring-white/30 w-[80vw] rounded-[36px] sm:w-[50vw] m-5vw" required />
+            <button type ="submit" className="bg-white text-black px-4 py-2 rounded-full hover:scale-[1.1] transition duration-300">Generate Playlist</button>
           </form>
           {loading?<TrophySpin color="#530f80" size="medium" text="Loading..." textColor="#530f80" style={{ display: loading ? 'block' : 'none' }} />: null}
-          {playlisturl ? <div> <div className={`bg-secondaryBackground text-white rounded-xl p-8 max-w-4xl mx-auto flex  gap-8 ${isMobile ? 'flex-col' : 'flex-row'} sm:flex-row items-center sm:items-start`}>
+          {playlisturl ? <div> <div className={`bg-gray-700/40 text-white rounded-xl p-8 max-w-4xl mx-auto flex flex-col gap-8 sm:flex-row max-w-[90vw] items-center sm:items-start`}>
       {playlist?.images?.[0]?.url && (
         <div className="flex-shrink-0">
           <Image
@@ -192,13 +193,11 @@ export default function Home() {
     </div>
     <div className="max-w-4xl mx-auto mt-10">
       <h3 className="text-2xl font-semibold mb-4">Tracks</h3>
-      <ol>
+        <ol>
         {playlist?.tracks?.items?.map((item, i) =>
           item?.track ? (
-            <li
-              key={item.track.id || i}
-              className="flex items-center gap-4"
-            ><embed src={item.track.external_urls.spotify.replace("track/", "embed/track/")} className="w-[90vw] h-[10em] object-cover" />
+            <li key={item.track.id || i}
+              className="flex items-center gap-4"><embed src={item.track.external_urls.spotify.replace("track/", "embed/track/")} className="w-[90vw] h-[10em] object-cover" />
             </li>
           ) : null
         )}
