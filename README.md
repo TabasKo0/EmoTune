@@ -1,10 +1,101 @@
-Spotify Ai powered Mood based playlist generator:
-Login with spotify to begin 
+# 🎵 EmoTune
 
-## Getting Started
+**AI-Powered Spotify Playlist Generator Based on Your Mood**
 
-First, run the development server:
+EmoTune is a Next.js web application that creates personalized Spotify playlists using artificial intelligence. Simply describe your mood, activity, or what you're feeling, and EmoTune will generate a curated playlist tailored to your emotions.
 
+![EmoTune Home Page](https://github.com/user-attachments/assets/c45fb035-1c04-43c8-a837-f353220daca0)
+
+## ✨ Features
+
+### 🎯 **Mood-Based Playlist Generation**
+- Enter any mood, activity, or feeling (e.g., "feeling nostalgic", "workout energy", "rainy day vibes")
+- AI-powered playlist creation using Google Gemini API
+- Automatic Spotify playlist creation in your account
+
+![Mood Input Example](https://github.com/user-attachments/assets/10c3bd40-81e2-4267-98c6-089c7b2ea57f)
+
+### 🔐 **Spotify Integration** 
+- Secure OAuth authentication with Spotify
+- Direct playlist creation in your Spotify account
+- Access to your Spotify profile and listening history
+
+![Spotify Sign In](https://github.com/user-attachments/assets/f54080f5-6e03-48ed-a293-aa2f1a6774bc)
+
+### 📱 **Responsive Design**
+- Mobile-friendly interface
+- Clean, modern UI with dark/light theme support
+- Seamless experience across all devices
+
+### 📚 **Playlist History**
+- Track all your generated playlists
+- SQLite database for playlist storage
+- View detailed playlist information and tracks
+
+![Dashboard View](https://github.com/user-attachments/assets/678e4792-861d-4578-b6cc-46326fb0a8f8)
+
+## 🚀 Technology Stack
+
+- **Frontend**: Next.js 15.5.4, React 19, Tailwind CSS
+- **Backend**: Node.js, Next.js API Routes
+- **Database**: SQLite3
+- **AI**: Google Gemini API
+- **Authentication**: Spotify OAuth
+- **Styling**: Tailwind CSS with custom theming
+- **Icons & UI**: Custom SVG icons, React Loading Indicators
+
+## 📋 Prerequisites
+
+Before running EmoTune, ensure you have:
+
+1. **Node.js** (version 18 or higher)
+2. **npm**, **yarn**, **pnpm**, or **bun** package manager
+3. **Spotify Developer Account** - [Create one here](https://developer.spotify.com/)
+4. **Google AI API Key** - [Get one here](https://makersuite.google.com/app/apikey)
+
+## 🛠️ Installation & Setup
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/TabasKo0/EmoTune.git
+cd EmoTune
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+# or
+bun install
+```
+
+### 3. Environment Configuration
+Create a `.env.local` file in the root directory:
+
+```env
+# Spotify API Configuration
+SPOTIFY_CLIENT_ID=your_spotify_client_id
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+SPOTIFY_REDIRECT_URI=http://localhost:3000/api/auth/callback
+
+# Google Gemini AI API
+GOOGLE_API_KEY=your_google_ai_api_key
+
+# Next.js Configuration
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_nextauth_secret
+```
+
+### 4. Spotify App Configuration
+1. Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+2. Create a new app
+3. Add `http://localhost:3000/api/auth/callback` to Redirect URIs
+4. Copy Client ID and Client Secret to your `.env.local`
+
+### 5. Run the Development Server
 ```bash
 npm run dev
 # or
@@ -15,23 +106,116 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🎯 Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Sign In**: Click "Login" and authenticate with your Spotify account
+2. **Generate Playlist**: Enter your mood or activity in the input field
+3. **Get Your Playlist**: AI will create a personalized playlist and add it to your Spotify
+4. **Enjoy**: Listen to your mood-based playlist on Spotify!
 
-## Learn More
+## 🏗️ Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+EmoTune/
+├── src/
+│   └── app/
+│       ├── api/                 # API Routes
+│       │   ├── auth/           # Spotify OAuth
+│       │   ├── createPlaylist/ # Playlist creation
+│       │   ├── geminiPlaylist/ # AI playlist generation
+│       │   ├── getToken/       # Token management
+│       │   └── playlistHistory/# Playlist storage
+│       ├── dashboard/          # Dashboard page
+│       ├── profile/            # User profile
+│       ├── signin/             # Sign-in page
+│       ├── db/                 # Database utilities
+│       ├── layout.js           # Root layout
+│       ├── page.js             # Home page
+│       └── globals.css         # Global styles
+├── public/                     # Static assets
+├── package.json
+└── README.md
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔧 API Endpoints
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Authentication
+- `POST /api/auth/signin` - Initiate Spotify OAuth
+- `GET /api/auth/callback` - Handle OAuth callback
+- `GET /api/auth/check` - Check authentication status
+- `POST /api/auth/logout` - Logout user
 
-## Deploy on Vercel
+### Playlist Management
+- `POST /api/geminiPlaylist` - Generate playlist with AI
+- `POST /api/createPlaylist` - Create playlist on Spotify
+- `GET /api/playlistHistory` - Retrieve playlist history
+- `POST /api/playlistHistory` - Save playlist to history
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Utilities
+- `GET /api/getToken` - Get user access token
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🎨 Theming
+
+EmoTune supports automatic dark/light theme switching based on system preferences:
+
+- **Light Theme**: Clean white background with gray accents
+- **Dark Theme**: Purple gradient background (#733893) with yellow-green text (#e6e8a3)
+
+## 🚀 Deployment
+
+### Deploy on Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Connect your repository to [Vercel](https://vercel.com)
+3. Add environment variables in Vercel dashboard
+4. Update Spotify redirect URI to your production URL
+5. Deploy!
+
+### Other Platforms
+
+EmoTune can be deployed on any platform that supports Node.js:
+- Netlify
+- Railway
+- Heroku
+- DigitalOcean App Platform
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Spotify Authentication Not Working**
+- Verify redirect URI matches exactly in Spotify app settings
+- Check CLIENT_ID and CLIENT_SECRET are correct
+
+**AI Playlist Generation Failing**
+- Ensure GOOGLE_API_KEY is valid and has quota remaining
+- Check network connectivity to Google AI services
+
+**Database Errors**
+- Verify SQLite3 is properly installed
+- Check file permissions for database creation
+
+## 📧 Support
+
+If you encounter any issues or have questions:
+- Open an issue on GitHub
+- Check existing issues for solutions
+- Review the troubleshooting section
+
+---
+
+**Made with ❤️ and 🎵 by TabasKo0**
