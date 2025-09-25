@@ -5,6 +5,7 @@
 EmoTune is a Next.js web application that creates personalized Spotify playlists using artificial intelligence. Simply describe your mood, activity, or what you're feeling, and EmoTune will generate a curated playlist tailored to your emotions.
 
 ![EmoTune Home Page](<img width="1919" height="1079" alt="Screenshot 2025-09-25 231800" src="https://github.com/user-attachments/assets/ade019cc-b413-4d1c-9350-849791c439d2" />)
+<img width="1919" height="1079" alt="Screenshot 2025-09-25 231800" src="https://github.com/user-attachments/assets/ade019cc-b413-4d1c-9350-849791c439d2" />
 
 ## ✨ Features
 
