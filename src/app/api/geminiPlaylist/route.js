@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export async function POST(req) {
   const { message } = await req.json();
   const apiKey = process.env.GOOGLE_API_KEY;
-  const prompt = `Create a spotify playlist based on the following message(may be mood, activity, request, or image) ${message}
+  const prompt = `As a therpist , Create a spotify playlist to soothe whatever rush of emotions or mood they are feeling or suggest playlist based on input if input is considered to not be reflection of emotion or mood(for example angry-soothing musics, sad- uplifting music,etc) :${message}
                 Return the playlist in only the following json format (no other suggestions , talking or anything, just the json):
                 {playlistName:string,description:string,songs:{
                 {title:string,artist:string},...}}`;

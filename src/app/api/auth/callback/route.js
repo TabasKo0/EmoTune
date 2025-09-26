@@ -26,8 +26,9 @@ export async function GET(request) {
         client_secret
         }).toString()
     });
-    //console.log('Token response status:', tokenRes.status);
+    
     const tokenData = await tokenRes.json();
+    //console.log('Token response status:', tokenData);
     if (!tokenRes.ok) {
         return NextResponse.redirect('/?error=token_exchange_failed');
     }

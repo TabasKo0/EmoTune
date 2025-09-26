@@ -1,11 +1,11 @@
 "use client";
-import React, { use } from 'react'
+import React from 'react'
 import { useEffect ,useState} from 'react';
 import Image from 'next/image';
 import { TrophySpin } from 'react-loading-indicators';
-import ScrollStack, { ScrollStackItem } from '../../components/ScrollStack'
 
 export default function Profile() {
+    
     const [userData, setUserData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [playlists,setPlaylists]=useState(null);
@@ -21,26 +21,13 @@ export default function Profile() {
         const fetchPlaylists = async () => {
             const res = await fetch('/api/playlistHistory');
             const data = await res.json();
-            setPlaylists(data.playlists);
-            isshow(new Array(data.playlists.length).fill(false));
-            //console.log("Wdadawd",playlists)
-            console.log(data);
+            setPlaylists(JSON.parse(data.playlists[0]?.playlists));
+            isshow(new Array(JSON.parse(data.playlists[0].playlists).length).fill(false));
+            console.log("lookie here", (data.playlists[0].playlists));
         }
         fetchPlaylists();
     }, []);
-
-    const [isMobile, setIsMobile] = useState(false);
-
-    useEffect(() => {
-        setIsMobile(window.innerWidth < 768);
-
-        function handleResize() {
-        setIsMobile(window.innerWidth < 768);
-        }
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
+    
     async function handleLogout() {
 
         try {
@@ -60,8 +47,8 @@ export default function Profile() {
     return (
         <div className="flex flex-col items-center text-foreground">
                 <div>{!userData?.error ? (
-                    <div className={`flex justify-end bg-white/20 gap-4 p-8 mt-10 rounded-[48] shadow w-[90vw] flex-col justify-start max-w-[90vw] `}>
-                        <div className="flex flex-row gap-10 ">{userData?.images?.[0]?.url ? <Image src={userData?.images?.[0]?.url ? userData.images[0].url : null} alt={userData.display_name ? userData.display_name : 'username'} height="200" width="200" className="rounded-[48]"/>:"username"}
+                    <div className={`flex justify-end bg-white/20 gap-4 p-8 mt-10 rounded-[48] shadow w-[90vw] flex-col justify-start items-end sm:items-center max-w-[90vw] `}>
+                        <div className="flex flex-col sm:flex-row gap-10 items-center ">{userData?.images?.[0]?.url ? <Image src={userData?.images?.[0]?.url ? userData.images[0].url : null} alt={userData.display_name ? userData.display_name : 'username'} height="200" width="200" className="rounded-[48]"/>:"username"}
                             <div className='text-2xl text-white text-bold'>
                                 <div>Username: {userData?.display_name}</div>
                                 <div>Email: {userData?.email ? userData.email : "No email provided"}</div>
@@ -82,10 +69,11 @@ export default function Profile() {
             </div>
             <h2 className="text-2xl text-white font-bold mt-10 mb-4">Your Playlists</h2>
             <ol className="flex flex-col justify-center items-center mb-10 gap-4 w-[90vw] max-w-4xl">
+                
                 {playlists ? playlists.map((item, index) => (
-                    <li key={index}><div className="bg-gray-500/30 min-w-[90vw] p-4 rounded-[20px]">
-                        <div className="flex flex-row justify-between "><div><div className="font-bold text-white text-3xl ">{item.name}</div>
-                            <div className="text-white">{item.description}</div></div>
+                    <li key={index}><div className="bg-gray-500/30 min-w-[80vw] p-4 rounded-[20px]">
+                        <div className="flex flex-row justify-between "><div><div className="font-bold text-white text-3xl ">{item[0]}</div>
+                            <div className="text-white">{item[1]}</div></div>
                             <div><button onClick={() => isshow(prev => {
                                 const newShow = [...prev];
                                 newShow[index] = !newShow[index];
@@ -106,7 +94,7 @@ export default function Profile() {
                                 </svg>
                                 </button></div>
                             </div>
-                        <embed src={"https://open.spotify.com/embed/playlist/"+item.url} className={`w-[90vw] h-[10em] object-cover ${show[index] ? '' : 'hidden'}`} />
+                        <embed src={item[2]?.replace("playlist/","embed/playlist/")} className={`w-[90vw] h-[10em] object-cover ${show[index] ? '' : 'hidden'}`} />
                     </div></li>
                 )) : null}
             </ol>

@@ -14,7 +14,7 @@ export default function SignInPage() {
                 window.location.href = data.url;
             }
             else {
-                console.error('Failed to get sign-in URL:', data);
+                console.error('Failed to get sign-in URL:', data);  
             }
         } catch (error) {
             console.error('Error during sign-in:', error);
@@ -22,8 +22,8 @@ export default function SignInPage() {
     }
     return (
         <div className={"flex justify-center items-start h-screen mt-10"}>
-            <button onClick={handleSignIn} className="bg-tertbac p-4 rounded-[36px]">
-                {loading ? <TrophySpin color="#530f80" size="medium" text="Loading..." textColor="#530f80" /> : "Sign In with Spotify"}
+            <button onClick={handleSignIn} className="bg-white p-4 rounded-[36px]">
+                {loading ? <TrophySpin color="#8d8d8dff" size="medium" text="Loading..." textColor="#160522ff" /> : "Sign In with Spotify"}
             </button>
         </div>
     );

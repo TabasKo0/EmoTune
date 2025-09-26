@@ -3,13 +3,16 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req) {
   try {
-    const { name, description, url } = await req.json();
-    console.log('Trying to save playlist:', { name, description, url });
-    
-    const result = await addPlaylist(name, description, url);
-
-    console.log('Playlist saved with ID:', result.id);
-    
+    const { id, playlist } = await req.json();
+    let plst= await getPlaylists(id);
+    plst=plst.playlists;
+    if (plst != []) {
+      plst.push(playlist);
+    } else {
+      plst=[playlist];
+    }
+    console.log("pres",plst);
+    const result = await addPlaylist(id,JSON.stringify(plst));
     return NextResponse.json({ 
       success: true, 
       id: result.id,
@@ -27,7 +30,9 @@ export async function POST(req) {
 
 export async function GET(req) {
   try {
-    const playlists = await getPlaylists();
+    const id = req.cookies.get('spotify_user_id')?.value;
+    console.log("id",id);
+    const playlists = await getPlaylists(id);
     return NextResponse.json({ success: true, playlists });
   } catch (error) {
     console.error('Error getting playlists:', error);

@@ -3,24 +3,15 @@ import {useState,useEffect} from "react";
 import { TrophySpin } from "react-loading-indicators";
 import Link from "next/link";
 import Image from "next/image";
-import ScrollStack, { ScrollStackItem } from '../components/ScrollStack'
+import { Gem } from "lucide-react";
 
 export default function Home() {
   const [loading,isloading]=useState(false);
   const [playlisturl,setPlaylist]=useState(null);
   const [playlist,setPlaylistData]=useState(null);
   const [userData, setUserData] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [geminiPlaylist, setGeminiPlaylist] = useState(null);
   
-      useEffect(() => {
-          setIsMobile(window.innerWidth < 768);
-  
-          function handleResize() {
-          setIsMobile(window.innerWidth < 768);
-          }
-          window.addEventListener("resize", handleResize);
-          return () => window.removeEventListener("resize", handleResize);
-      }, []);
   useEffect(() => {
       const fetchData = async () => {
           const res = await fetch('/api/auth/check');
@@ -67,7 +58,6 @@ export default function Home() {
   async function fetchPlaylistDetails(playlistUrl, accessToken) {
       const playlistId = playlistUrl;
 
-      // Fetch the playlist details from Spotify API
       const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -79,23 +69,33 @@ export default function Home() {
       }
 
       const data = await response.json();
-      console.log(data);
+      console.log("idhar",{ id: userData.id , playlist: [data.name, data.description,data.id] });
       setPlaylistData(data);
       const response2 = await fetch('/api/playlistHistory', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: data.name , description: data.description, url: playlistUrl }),
+        body: JSON.stringify({ id: userData.id , playlist: [data?.name, data?.description,data?.external_urls?.spotify] }),
       });
-      return data;
+      return response2;
     }
-
+  async function handleCreatePlaylist(){
+    const res1 = await fetch('/api/getToken');
+    const data1 = await res1.json();
+    //console.log(data1.accessToken);
+    createPlaylist(data1.accessToken, geminiPlaylist );
+    setGeminiPlaylist(null);
+  
+  }
   function handleSubmit() {
+     
     return async function (e) {
       e.preventDefault();
       const formData = new FormData(e.target);
       const message = formData.get("message");
+      setPlaylist(null);
+      setGeminiPlaylist(null);
 
       if (!message) return;
 
@@ -117,10 +117,13 @@ export default function Home() {
         try {
           const resp = JSON.stringify(data.reply).replace(/```json|```/g, '').trim();
           console.log(JSON.parse(resp));
-          const res1 = await fetch('/api/getToken');
-          const data1 = await res1.json();
-          //console.log(data1.accessToken);
-          createPlaylist(data1.accessToken, JSON.parse(resp) );
+          if (typeof JSON.parse(resp) !== 'object' || !JSON.parse(resp).playlistName) {
+            setGeminiPlaylist(null);
+          }
+          
+          setGeminiPlaylist(JSON.parse(JSON.parse(resp)));
+          console.log(JSON.parse(resp));
+          
         } catch (err) {
           console.error('Invalid playlist JSON:', err);
         }
@@ -134,16 +137,37 @@ export default function Home() {
 
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] justify-items-center min-h-[90vh] pb-20 ">
+      
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <div className="flex gap-4 items-center flex-col">
           <form
             onSubmit={handleSubmit()}
             className="flex items-center flex-col gap-4 ">
             <input type="text" name="message" placeholder="What are you in the mood for today ?" className="bg-gray-600/20 h-[8vh] text-sm text-white p-6 ring-4 ring-white/30 w-[80vw] rounded-[36px] sm:w-[50vw] m-5vw" required />
-            <button type ="submit" className="bg-white text-black px-4 py-2 rounded-full hover:scale-[1.1] transition duration-300">Generate Playlist</button>
+            {loading?<TrophySpin color="#afacb0ff" size="medium" text="Loading..." textColor="#8c888fff" style={{ display: loading ? 'block' : 'none' }} />:<button type ="submit" className="bg-white text-black px-4 py-2 rounded-full hover:scale-[1.1] transition duration-300">Generate Playlist</button>}
           </form>
-          {loading?<TrophySpin color="#530f80" size="medium" text="Loading..." textColor="#530f80" style={{ display: loading ? 'block' : 'none' }} />: null}
-          {playlisturl ? <div> <div className={`bg-gray-700/40 text-white rounded-xl p-8 max-w-4xl mx-auto flex flex-col gap-8 sm:flex-row max-w-[90vw] items-center sm:items-start`}>
+          <div className="max-w-[90vw]">{geminiPlaylist?<div>{
+            <div className="flex flex-col justify-between flex-1 bg-gray-300/50 p-6 rounded-[23px] m-4">
+            <div>
+              <h2 className="text-4xl font-bold mb-2">{geminiPlaylist?.playlistName}</h2>
+              <p className="text-2xl text-black mb-4">{geminiPlaylist?.description}</p>
+              <p className="mb-2">
+                
+              </p>
+                <span className="font-semibold">Tracks:</span> 
+                <ol className="mb-4">
+                {geminiPlaylist?.songs.map((item,i)=>(
+                   <li key={i} className="text-black text-lg"><strong>{item.title}</strong> - {item.artist}</li>
+                ))}
+              </ol>
+            </div>
+            <div className="mt-6">{geminiPlaylist?<div>
+              {loading? <TrophySpin color="#afacb0ff" size="medium" text="Loading..." textColor="#8c888fff" style={{ display: loading ? 'block' : 'none' }} />:<button onClick={handleCreatePlaylist} className="bg-white rounded-[24px] p-3 hover:scale-105 transition">Create Playlist</button>}</div> :
+            <div>Enter your mood to start jamming!</div>}
+            </div>
+          </div>
+        }</div>:<div className="text-white">Enter your mood to start jamming!</div>}</div>
+         {playlisturl ? <div> <div className={`bg-gray-700/40 text-white rounded-xl p-8 max-w-4xl mx-auto flex flex-col gap-8 sm:flex-row max-w-[90vw] items-center sm:items-start`}>
       {playlist?.images?.[0]?.url && (
         <div className="flex-shrink-0">
           <Image
@@ -179,15 +203,16 @@ export default function Home() {
             <span className="font-semibold">Tracks:</span> {playlist?.tracks?.total}
           </p>
         </div>
-        <div className="mt-6">
+        <div className="mt-6">{playlist?<div>
           <Link
             href={playlist?.external_urls?.spotify || "#"}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-foreground hover:bg-green-600 text-tertbac px-8 py-2 rounded-full font-bold transition"
+            className="inline-block bg-foreground hover:bg-green-600 text-white px-8 py-2 rounded-full font-bold transition"
           >
             Open in Spotify
-          </Link>
+          </Link></div>:
+          <button onClick={handleCreatePlaylist}>Create Playlist</button>}
         </div>
       </div>
     </div>
@@ -197,14 +222,65 @@ export default function Home() {
         {playlist?.tracks?.items?.map((item, i) =>
           item?.track ? (
             <li key={item.track.id || i}
-              className="flex items-center gap-4"><embed src={item.track.external_urls.spotify.replace("track/", "embed/track/")} className="w-[90vw] h-[10em] object-cover" />
+              className="flex items-center gap-4"><embed src={item.track.external_urls.spotify.replace("track/", "embed/track/")} className="w-[90vw] h-[30vh] overflow-hidden object-cover" />
             </li>
           ) : null
         )}
       </ol>
-    </div></div>  : null}
+      </div>
+    </div> : null}
         </div>
       </main>
     </div>
   );
 }
+
+
+{/*}
+{
+  "playlistName": "Energy Boost",
+  "description": "A playlist to get you moving and feeling energized!",
+  "songs": [
+    {
+      "title": "Walking on Sunshine",
+      "artist": "Katrina & The Waves"
+    },
+    {
+      "title": "September",
+      "artist": "Earth, Wind & Fire"
+    },
+    {
+      "title": "Don't Stop Me Now",
+      "artist": "Queen"
+    },
+    {
+      "title": "Good as Hell",
+      "artist": "Lizzo"
+    },
+    {
+      "title": "Happy",
+      "artist": "Pharrell Williams"
+    },
+    {
+      "title": "Mr. Blue Sky",
+      "artist": "Electric Light Orchestra"
+    },
+    {
+      "title": "Uptown Funk",
+      "artist": "Mark Ronson ft. Bruno Mars"
+    },
+    {
+      "title": "I Want You Back",
+      "artist": "The Jackson 5"
+    },
+    {
+      "title": "Dynamite",
+      "artist": "BTS"
+    },
+    {
+      "title": "Levitating",
+      "artist": "Dua Lipa"
+    }
+  ]
+}
+*/}

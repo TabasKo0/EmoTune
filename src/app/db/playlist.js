@@ -19,9 +19,8 @@ db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS playlists (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      description TEXT,
-      url TEXT NOT NULL,
+      userid TEXT NOT NULL UNIQUE,
+      playlists TEXT DEFAULT "[]",
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `, (err) => {
@@ -33,32 +32,66 @@ db.serialize(() => {
   });
 });
 
-function addPlaylist(name, description, url) {
+async function addPlaylist(userid, playlists) {
   return new Promise((resolve, reject) => {
-    if (!name || !url) {
-      reject(new Error('Name and url are required'));
+    if (!userid || !playlists) {
+      reject(new Error('User ID and playlists are required'));
       return;
     }
-    
-    db.run(
-      'INSERT INTO playlists (name, description, url) VALUES (?, ?, ?)',
-      [name, description || '', url],
-      function(err) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve({ id: this.lastID });
-        }
+
+    // First, check if the user exists
+    db.get('SELECT userid FROM playlists WHERE userid = ?', [userid], (err, row) => {
+      if (err) {
+        console.error('Error checking user:', err);
+        reject(err);
+        return;
       }
-    );
+
+      if (!row) {
+        // User does not exist, create a new entry
+        db.run(
+          'INSERT INTO playlists (userid, playlists) VALUES (?, ?)',
+          [userid, playlists],
+          function (err) {
+            if (err) {
+              console.error('Error creating user:', err);
+              reject(err);
+            } else {
+              console.log('New user added, ID:', userid);
+              resolve({ success: true });
+            }
+          }
+        );
+      } else {
+        // User exists, update the playlists
+        db.run(
+          'UPDATE playlists SET playlists = ? WHERE userid = ?',
+          [playlists, userid],
+          function (err) {
+            if (err) {
+              console.error('Error updating playlists:', err);
+              reject(err);
+            } else {
+              if (this.changes > 0) {
+                console.log('Playlists updated for user:', userid);
+                resolve({ success: true });
+              } else {
+                console.log('No playlists updated for user:', userid);
+                resolve({ success: false });
+              }
+            }
+          }
+        );
+      }
+    });
   });
 }
 
-function getPlaylists() {
+function getPlaylists(id) {
   return new Promise((resolve, reject) => {
     db.all(
-      'SELECT * FROM playlists ORDER BY created_at DESC',
-      [],
+      'SELECT * FROM playlists WHERE userid=? ORDER BY created_at DESC',
+      [id],
       (err, rows) => {
         if (err) {
           reject(err);
