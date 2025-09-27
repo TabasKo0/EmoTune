@@ -3,7 +3,7 @@ import {useState,useEffect} from "react";
 import { TrophySpin } from "react-loading-indicators";
 import Link from "next/link";
 import Image from "next/image";
-import { Gem } from "lucide-react";
+import { Toaster,toast} from 'react-hot-toast';
 
 export default function Home() {
   const [loading,isloading]=useState(false);
@@ -65,7 +65,8 @@ export default function Home() {
       });
 
       if (!response.ok) {
-        throw new Error(`Spotify API error: ${response.statusText}`);
+        //throw new Error(`Spotify API error: ${response.statusText}`);
+        toast.error("Error fetching playlist details from Spotify.");
       }
 
       const data = await response.json();
@@ -120,8 +121,11 @@ export default function Home() {
           if (typeof JSON.parse(resp) !== 'object' || !JSON.parse(resp).playlistName) {
             setGeminiPlaylist(null);
           }
-          
-          setGeminiPlaylist(JSON.parse(JSON.parse(resp)));
+          if (data.reply!="No response.") {
+            setGeminiPlaylist(JSON.parse(JSON.parse(resp)));
+          }else{
+            toast.error("Couldn't generate playlist, Please try again!");
+          }
           console.log(JSON.parse(resp));
           
         } catch (err) {
@@ -137,7 +141,7 @@ export default function Home() {
 
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] justify-items-center min-h-[90vh] pb-20 ">
-      
+      <Toaster/>
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <div className="flex gap-4 items-center flex-col">
           <form
@@ -221,7 +225,7 @@ export default function Home() {
         <ol>
         {playlist?.tracks?.items?.map((item, i) =>
           item?.track ? (
-            <li key={item.track.id || i}
+            <li key={i}
               className="flex items-center gap-4"><embed src={item.track.external_urls.spotify.replace("track/", "embed/track/")} className="w-[90vw] h-[30vh] overflow-hidden object-cover" />
             </li>
           ) : null

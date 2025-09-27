@@ -21,9 +21,10 @@ export default function Profile() {
         const fetchPlaylists = async () => {
             const res = await fetch('/api/playlistHistory');
             const data = await res.json();
-            setPlaylists(JSON.parse(data.playlists[0]?.playlists));
-            isshow(new Array(JSON.parse(data.playlists[0].playlists).length).fill(false));
-            console.log("lookie here", (data.playlists[0].playlists));
+            if (data.playlists[0]?.playlists) {
+                setPlaylists(JSON.parse(data.playlists[0]?.playlists));
+                isshow(new Array(JSON.parse(data.playlists[0].playlists).length).fill(false));
+            }
         }
         fetchPlaylists();
     }, []);

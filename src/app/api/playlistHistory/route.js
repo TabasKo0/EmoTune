@@ -4,20 +4,19 @@ import { NextResponse } from 'next/server';
 export async function POST(req) {
   try {
     const { id, playlist } = await req.json();
-    let plst= await getPlaylists(id);
-    plst=plst.playlists;
-    if (plst != []) {
-      plst.push(playlist);
-    } else {
-      plst=[playlist];
-    }
-    console.log("pres",plst);
-    const result = await addPlaylist(id,JSON.stringify(plst));
-    return NextResponse.json({ 
-      success: true, 
-      id: result.id,
-      message: 'Playlist saved successfully' 
-    });
+    let result=await getPlaylists(id).then(async (plst) => {
+          const plast = plst[0] ? JSON.parse(plst[0].playlists) : [];
+          console.log(plst);
+          console.log("pres",plast);
+          plast.push(playlist);
+          return  await addPlaylist(id,JSON.stringify(plast));
+         
+          })
+           return NextResponse.json({ 
+            success: result.success, 
+            id: result.id,
+            message: 'Playlist saved successfully' 
+          });
     
   } catch (error) {
     console.error('Error saving playlist:', error);

@@ -90,7 +90,7 @@ async function addPlaylist(userid, playlists) {
 function getPlaylists(id) {
   return new Promise((resolve, reject) => {
     db.all(
-      'SELECT * FROM playlists WHERE userid=? ORDER BY created_at DESC',
+      'SELECT * FROM playlists WHERE userid=?',
       [id],
       (err, rows) => {
         if (err) {
